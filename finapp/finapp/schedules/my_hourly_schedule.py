@@ -4,7 +4,7 @@ from dagster import hourly_schedule
 
 
 @hourly_schedule(
-    pipeline_name="my_pipeline",
+    pipeline_name="forescating_market",
     start_date=datetime(2021, 1, 1),
     execution_timezone="US/Central",
 )

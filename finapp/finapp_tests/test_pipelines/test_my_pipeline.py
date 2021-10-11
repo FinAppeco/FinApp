@@ -1,5 +1,5 @@
 from dagster import execute_pipeline
-from finapp.pipelines.my_pipeline import my_pipeline
+from finapp.pipelines.forescating_market import my_pipeline
 
 
 def test_my_pipeline():
