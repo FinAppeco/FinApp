@@ -1,12 +1,12 @@
 # finapp
 
-Welcome to your new Dagster repository.
+Welcome to your finapp repository.
 
 ### Contents
 
 | Name | Description |
 |-|-|
-| `finapp/` | A Python module that contains code for your Dagster repository |
+| `finapp/` | A Python module that contains code of finapp application |
 | `finapp_tests/` | A Python module that contains tests for `finapp` |
 | `workspace.yaml` | A file that specifies the location of the user code for Dagit and the Dagster CLI |
 | `README.md` | A description and guide for this code repository |
@@ -18,7 +18,7 @@ Welcome to your new Dagster repository.
 
 **Pyenv**
 ```bash
-export PYTHON_VERSION=X.Y.Z
+export PYTHON_VERSION=3.9.6
 pyenv install $PYTHON_VERSION
 pyenv virtualenv $PYTHON_VERSION finapp
 pyenv activate finapp
