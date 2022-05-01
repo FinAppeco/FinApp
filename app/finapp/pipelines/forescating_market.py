@@ -1,7 +1,7 @@
 from dagster import ModeDefinition, pipeline, PresetDefinition, file_relative_path
 import os
-from finapp.resources.potsgres_connector import get_postgresconnector
-from finapp.solids.extract_data import consume_api
+from app.finapp.resources.potsgres_connector import get_postgresconnector
+from app.finapp.solids.extract_data import consume_api
 from pathlib import Path
 # Mode definitions allow you to configure the behavior of your pipelines and solids at execution
 # time. For hints on creating modes in Dagster, see our documentation overview on Modes and

@@ -20,15 +20,15 @@ Welcome to your finapp repository.
 ```bash
 export PYTHON_VERSION=3.9.6
 pyenv install $PYTHON_VERSION
-pyenv virtualenv $PYTHON_VERSION finapp
-pyenv activate finapp
+pyenv virtualenv $PYTHON_VERSION app
+pyenv activate app
 ```
 
 **Conda**
 ```bash
 export PYTHON_VERSION=X.Y.Z
-conda create --name finapp python=PYTHON_VERSION
-conda activate finapp
+conda create --name app python=PYTHON_VERSION
+conda activate app
 ```
 
 2. Once you have activated your Python environment, install your repository as a Python package. By

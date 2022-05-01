@@ -1,5 +1,5 @@
 from dagster import execute_pipeline
-from finapp.pipelines.forescating_market import forescating_market
+from app.finapp.pipelines.forescating_market import forescating_market
 import quandl
 if __name__=='__main__':
     # debugging pipeline
