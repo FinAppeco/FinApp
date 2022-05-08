@@ -1,6 +1,6 @@
 from dagster import execute_solid
-from app.pipelines.forescating_market import MODE_TEST
-from app.solids.extract_data import hello
+from finapp.pipelines.forescating_market import MODE_TEST
+from finapp.solids.extract_data import hello
 
 
 def test_hello():

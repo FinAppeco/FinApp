@@ -1,0 +1,6 @@
+solids:
+  get_bond_price:
+    config:
+      from: '2020-06-01'
+      isin: US912810TD00
+      to: '2022-04-01'

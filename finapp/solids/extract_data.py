@@ -54,9 +54,9 @@ def get_bond_price(context):
     finnhub_client = context.resources.finnhub_client
     isin = context.solid_config["isin"]
     from_datetime = context.solid_config["from"]
-    from_datetime = datetime.datetime.timestamp(datetime.datetime.strptime(from_datetime, "%Y-%m-%d"))
+    from_datetime = int(datetime.datetime.timestamp(datetime.datetime.strptime(from_datetime, "%Y-%m-%d")))
     to_datetime = context.solid_config["to"]
-    to_datetime = datetime.datetime.timestamp(datetime.datetime.strptime(to_datetime, "%Y-%m-%d"))
+    to_datetime = int(datetime.datetime.timestamp(datetime.datetime.strptime(to_datetime, "%Y-%m-%d")))
     results = finnhub_client.bond_price(isin, from_datetime, to_datetime)
     df = pd.DataFrame(results)
     df['isin'] = isin
