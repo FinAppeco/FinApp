@@ -1,0 +1,135 @@
+version: "3.9"
+services:
+  # This service runs the gRPC server that loads and executes your pipelines, in both dagit
+  # and dagster-daemon. By setting DAGSTER_CURRENT_IMAGE to its own image, we tell the
+  # run launcher to use this same image when launching runs in a new container as well.
+  # Multiple containers like this can be deployed separately - each just needs to run on
+  # its own port, and have its own entry in the workspace.yaml file that's loaded by dagit.
+  finapp_pipelines:
+    build:
+      context: .
+      dockerfile: ./Dockerfile_pipelines
+    container_name: finapp_pipelines
+    image: finapp_pipelines
+#    restart: on-failure:2
+    expose:
+      - 4000
+    ports:
+      - "4000:4000"
+    environment:
+      POSTGRES_PASSWORD: ${DAGSTER_PG_PASSWORD}
+      POSTGRES_USER: ${DAGSTER_PG_USERNAME}
+      POSTGRES_DB: ${DAGSTER_PG_OP_DB}
+      DAGSTER_PG_HOST: ${DAGSTER_PG_OP_DB}
+      DAGSTER_PG_OP_DB: ${DAGSTER_PG_OP_DB}
+      PGPORT : ${POSTGRES_DEV_PORT}
+      DAGSTER_CURRENT_IMAGE: ${DAGSTER_CURRENT_IMAGE}
+    volumes:
+      - ./local_artifact_storage/storage:/opt/dagster/app/local_artifact_storage/storage
+      - ./project_dataML/data_logs/stock_prediction_api.xlsx:/opt/dagster/app/project_dataML/data_logs/stock_prediction_api.xlsx
+    networks:
+      - dagster_network
+    depends_on:
+      - op_db
+#    network_mode: host
+  # This service runs dagit, which loads the pipelines from the user code container.
+  # Since our instance uses the QueuedRunCoordinator, any runs submitted from dagit will be put on
+  # a queue and later dequeued and launched by dagster-daemon.
+  finapp_dagit:
+    build:
+      context: .
+      dockerfile: ./Dockerfile_dagster
+    entrypoint:
+      - dagit
+      - -h
+      - "0.0.0.0"
+      - -p
+      - "3000"
+      - -w
+      - workspace.yaml
+    container_name: dagster_dagit_finapp
+    image: dagster_app:0.12.14
+#    restart: on-failure
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"
+    environment:
+      POSTGRES_PASSWORD: ${DAGSTER_PG_PASSWORD}
+      POSTGRES_USER: ${DAGSTER_PG_USERNAME}
+      POSTGRES_DB: ${DAGSTER_PG_DB}
+      DAGSTER_PG_HOST: ${DAGSTER_PG_HOST}
+      DAGSTER_PG_OP_DB: ${DAGSTER_PG_OP_DB}
+      DAGSTER_PG_DB: ${DAGSTER_PG_DB}
+    volumes: # Make docker client accessible so we can terminate containers from dagit
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./local_artifact_storage:/opt/dagster/app/local_artifact_storage
+    networks:
+      - dagster_network
+#    network_mode: host
+    depends_on:
+      - finapp_pipelines
+      - backend_dagster
+      - op_db
+  # This service runs the dagster-daemon process, which is responsible for taking runs
+  # off of the queue and launching them, as well as creating runs from schedules or sensors.
+  finapp_daemon:
+    entrypoint:
+      - dagster-daemon
+      - run
+    container_name: dagster_daemon_finapp
+    image: dagster_app:0.12.14
+#    restart: on-failure
+    environment:
+      POSTGRES_PASSWORD: ${DAGSTER_PG_PASSWORD}
+      POSTGRES_USER: ${DAGSTER_PG_USERNAME}
+      POSTGRES_DB: ${DAGSTER_PG_DB}
+      DAGSTER_PG_HOST: ${DAGSTER_PG_HOST}
+      DAGSTER_PG_OP_DB: ${DAGSTER_PG_OP_DB}
+      DAGSTER_PG_DB: ${DAGSTER_PG_DB}
+    volumes: # Make docker client accessible so we can launch containers using host docker
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./local_artifact_storage:/opt/dagster/app/local_artifact_storage
+    networks:
+      - dagster_network
+    depends_on:
+      - finapp_pipelines
+      - backend_dagster
+      - op_db
+
+  backend_dagster:
+    image: postgres:14
+    restart: always
+    container_name: finapp_db_backend
+    environment:
+      POSTGRES_PASSWORD: ${DAGSTER_PG_PASSWORD}
+      POSTGRES_USER: ${DAGSTER_PG_USERNAME}
+      POSTGRES_DB: ${DAGSTER_PG_DB}
+      PGPORT: 5432
+    ports:
+      - ${PGPORT_BACKEND}:5432
+    networks:
+      - dagster_network
+
+  op_db:
+    image: postgres:14
+    restart: always
+    container_name: finapp_op_db
+    environment:
+      POSTGRES_PASSWORD: ${DAGSTER_PG_PASSWORD}
+      POSTGRES_USER: ${DAGSTER_PG_USERNAME}
+      POSTGRES_DB: ${DAGSTER_PG_OP_DB}
+      PGPORT: 5433
+    ports:
+      - ${POSTGRES_DEV_PORT}:5433
+    networks:
+      - dagster_network
+
+networks:
+  dagster_network:
+    driver: bridge
+    name: dagster_network
+
+volumes:
+  db-data:
+    name: "dremio_data"

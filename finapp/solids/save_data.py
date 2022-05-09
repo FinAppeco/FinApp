@@ -14,7 +14,7 @@ def local_save(context, df: DataFrame) -> None:
         pd.DataFrame: data with new fields name
     """
     path_file = os.path.dirname(__file__)
-    folder = os.path.abspath(os.path.join(path_file, "..", "data_logs"))
+    folder = os.path.abspath(os.path.join(path_file, "..", "local_data"))
     writer = pd.ExcelWriter(os.path.join(folder, context.pipeline_name+".xlsx"), engine='openpyxl')
     df.to_excel(writer, index=False)
     writer.save()
