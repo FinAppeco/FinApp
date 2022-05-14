@@ -16,9 +16,7 @@ RUN pip install --no-cache-dir --default-timeout=100\
     gcsfs==2022.2.0 \
     dateparser==1.0.0 \
     db-dtypes \
-    great-expectations==0.14.4 \
     python-decouple==3.4 \
-    finnhub-python \
     mplfinance==0.12.8b9 \
     openpyxl==3.0.7 \
     finnhub-python==2.4.13 \
@@ -35,11 +33,10 @@ WORKDIR /opt/dagster/app/
 RUN mkdir finapp
 
 COPY finapp/ finapp/
-COPY setup.py ./setup.py
-RUN pip install -e .
-COPY .env ./
 
 COPY config/local_docker/dagster.yaml config/local_docker/workspace.yaml setup.py ./
+
+RUN pip install -e .
 
 ENV DAGSTER_HOME=/opt/dagster/app/
 

@@ -15,10 +15,10 @@ run_launcher:
     network: dagster_network
     container_kwargs:
       auto_remove: true
-      volumes: { 'local_artifact_storage':
+      volumes: { 'pipelines_storage':
                    { 'bind': '/opt/dagster/app/local_artifact_storage/storage', 'mode': 'rw' },
-                 'finapp/local_data':
-                   { 'bind': '/opt/dagster/app/finapp/local_data', 'mode': 'rw' }}
+                 './finapp/data':
+                   { 'bind': '/opt/dagster/app/finapp/data', 'mode': 'rw' }}
 
 run_coordinator:
   module: dagster.core.run_coordinator
@@ -39,7 +39,7 @@ run_storage:
         env: DAGSTER_PG_HOST
       db_name:
         env: DAGSTER_PG_DB
-      port: 5434
+      port: 5432
 
 schedule_storage:
   module: dagster_postgres.schedule_storage
@@ -54,7 +54,7 @@ schedule_storage:
         env: DAGSTER_PG_HOST
       db_name:
         env: DAGSTER_PG_DB
-      port: 5434
+      port: 5432
 
 event_log_storage:
   module: dagster_postgres.event_log
@@ -69,7 +69,7 @@ event_log_storage:
         env: DAGSTER_PG_HOST
       db_name:
         env: DAGSTER_PG_DB
-      port: 5434
+      port: 5432
 
 local_artifact_storage:
   module: dagster.core.storage.root

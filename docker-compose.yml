@@ -17,16 +17,17 @@ services:
     ports:
       - "4000:4000"
     environment:
-      POSTGRES_PASSWORD: ${DAGSTER_PG_PASSWORD}
-      POSTGRES_USER: ${DAGSTER_PG_USERNAME}
-      POSTGRES_DB: ${DAGSTER_PG_OP_DB}
-      DAGSTER_PG_HOST: ${DAGSTER_PG_OP_DB}
+      DAGSTER_PG_PASSWORD: ${DAGSTER_PG_PASSWORD}
+      DAGSTER_PG_USERNAME: ${DAGSTER_PG_USERNAME}
+      DAGSTER_PG_DB: ${DAGSTER_PG_DB}
+      DAGSTER_PG_HOST: ${DAGSTER_PG_HOST}
       DAGSTER_PG_OP_DB: ${DAGSTER_PG_OP_DB}
-      PGPORT : ${POSTGRES_DEV_PORT}
+      PGPORT_BACKEND : ${POSTGRES_DEV_PORT}
       DAGSTER_CURRENT_IMAGE: ${DAGSTER_CURRENT_IMAGE}
+      FINNUB_KEY: ${FINNUB_KEY}
     volumes:
-      - ./local_artifact_storage/storage:/opt/dagster/app/local_artifact_storage/storage
-      - ./project_dataML/data_logs/stock_prediction_api.xlsx:/opt/dagster/app/project_dataML/data_logs/stock_prediction_api.xlsx
+      - pipelines_storage:/opt/dagster/app/local_artifact_storage/storage
+      - ./finapp/data:/opt/dagster/app/finapp/data
     networks:
       - dagster_network
     depends_on:
@@ -55,15 +56,17 @@ services:
     ports:
       - "3000:3000"
     environment:
-      POSTGRES_PASSWORD: ${DAGSTER_PG_PASSWORD}
-      POSTGRES_USER: ${DAGSTER_PG_USERNAME}
-      POSTGRES_DB: ${DAGSTER_PG_DB}
+      DAGSTER_PG_PASSWORD: ${DAGSTER_PG_PASSWORD}
+      DAGSTER_PG_USERNAME: ${DAGSTER_PG_USERNAME}
+      DAGSTER_PG_DB: ${DAGSTER_PG_DB}
       DAGSTER_PG_HOST: ${DAGSTER_PG_HOST}
       DAGSTER_PG_OP_DB: ${DAGSTER_PG_OP_DB}
-      DAGSTER_PG_DB: ${DAGSTER_PG_DB}
+      PGPORT_BACKEND : ${POSTGRES_DEV_PORT}
+      DAGSTER_CURRENT_IMAGE: ${DAGSTER_CURRENT_IMAGE}
+      FINNUB_KEY: ${FINNUB_KEY}
     volumes: # Make docker client accessible so we can terminate containers from dagit
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./local_artifact_storage:/opt/dagster/app/local_artifact_storage
+      - pipelines_storage:/opt/dagster/app/local_artifact_storage/storage
     networks:
       - dagster_network
 #    network_mode: host
@@ -81,15 +84,17 @@ services:
     image: dagster_app:0.12.14
 #    restart: on-failure
     environment:
-      POSTGRES_PASSWORD: ${DAGSTER_PG_PASSWORD}
-      POSTGRES_USER: ${DAGSTER_PG_USERNAME}
-      POSTGRES_DB: ${DAGSTER_PG_DB}
+      DAGSTER_PG_PASSWORD: ${DAGSTER_PG_PASSWORD}
+      DAGSTER_PG_USERNAME: ${DAGSTER_PG_USERNAME}
+      DAGSTER_PG_DB: ${DAGSTER_PG_DB}
       DAGSTER_PG_HOST: ${DAGSTER_PG_HOST}
       DAGSTER_PG_OP_DB: ${DAGSTER_PG_OP_DB}
-      DAGSTER_PG_DB: ${DAGSTER_PG_DB}
+      PGPORT_BACKEND : ${POSTGRES_DEV_PORT}
+      DAGSTER_CURRENT_IMAGE: ${DAGSTER_CURRENT_IMAGE}
+      FINNUB_KEY: ${FINNUB_KEY}
     volumes: # Make docker client accessible so we can launch containers using host docker
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./local_artifact_storage:/opt/dagster/app/local_artifact_storage
+      - pipelines_storage:/opt/dagster/app/local_artifact_storage/storage
     networks:
       - dagster_network
     depends_on:
@@ -131,5 +136,5 @@ networks:
     name: dagster_network
 
 volumes:
-  db-data:
-    name: "dremio_data"
+  pipelines_storage:
+    external: false
