@@ -6,6 +6,7 @@ Welcome to your finapp repository.
 
 | Name | Description |
 |-|-|
+| `config/` | directory that contains the config files for deployment regarding to the enviroment |
 | `finapp/` | A Python module that contains code of finapp application |
 | `finapp_tests/` | A Python module that contains tests for `finapp` |
 | `workspace.yaml` | A file that specifies the location of the user code for Dagit and the Dagster CLI |
@@ -14,7 +15,7 @@ Welcome to your finapp repository.
 
 ## Getting up and running
 
-1. Create a new Python environment and activate.
+1. Install docker tool.
 
 **Pyenv**
 ```bash
@@ -78,3 +79,7 @@ code behaves as desired and does not break over time.
 
 [For hints on how to write tests for solids and pipelines in Dagster,
 [see our documentation tutorial on Testing](https://docs.dagster.io/tutorial/testable).
+
+## General architecture
+
+![image](src/images/Activity diagram.png).
