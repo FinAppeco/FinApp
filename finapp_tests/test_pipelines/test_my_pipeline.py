@@ -1,5 +1,5 @@
 from dagster import execute_pipeline
-from finapp.pipelines.forescating_market import my_pipeline
+
 
 
 def test_my_pipeline():
@@ -9,7 +9,7 @@ def test_my_pipeline():
     For hints on how to test your Dagster pipelines, see our documentation tutorial on Testing:
     https://docs.dagster.io/tutorial/testable
     """
-    result = execute_pipeline(my_pipeline, mode="test")
+    result = execute_pipeline(None, mode="test")
 
     assert result.success
     assert result.output_for_solid("hello") == "Hello, Dagster!"

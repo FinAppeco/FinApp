@@ -1,0 +1,32 @@
+FROM python:3.8-slim
+
+ENV DAGSTER_HOME=/opt/dagster/dagster_home/
+ARG DAGSTER_PG_USERNAME
+ARG DAGSTER_PG_PASSWORD
+ARG DAGSTER_PG_HOST
+ARG DAGSTER_PG_DB
+
+RUN mkdir -p $DAGSTER_HOME
+
+RUN pip install -U pip setuptools
+RUN pip install --no-cache-dir --default-timeout=100\
+    dagster==0.12.14  \
+    dagster-graphql==0.12.14   \
+    dagit==0.12.14   \
+    dagster-postgres==0.12.14   \
+    dagster-docker==0.12.14   \
+    dagster-gcp==0.12.14  \
+    dagstermill==0.12.14 \
+    markupsafe==2.0.1 \
+    jupyter
+
+
+# Set $DAGSTER_HOME and copy dagster instance and workspace YAML there
+
+COPY config/local_docker/dagster.yaml config/local_docker/workspace.yaml $DAGSTER_HOME
+
+WORKDIR $DAGSTER_HOME
+
+EXPOSE 3000
+
+ENTRYPOINT ["dagit", "-h", "0.0.0.0", "-p", "3000"]

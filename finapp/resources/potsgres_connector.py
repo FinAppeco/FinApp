@@ -6,18 +6,20 @@ from dagster import resource, Field
 class PostgresConnector(object):
 
     def __init__( self, schema ):
-        self.dbname = config('DBNAME')
-        self.user = config('DBUSER')
-        self.password = config('DBPASSWORD')
-        self.host = config('LOCALHOST')
-        self.engine = create_engine('postgresql+psycopg2://{user}:{password}@{hostname}/{database_name}'.format(
-            user=self.user,
-            password=self.password,
-            hostname=self.host,
-            database_name=self.dbname,
-
-        ),
-        connect_args={'options': '-csearch_path={}'.format(schema)})
+        self.user = config("DAGSTER_PG_USERNAME")
+        self.host = config("DAGSTER_PG_OP_DB")
+        self.database = config("DAGSTER_PG_OP_DB")
+        self.port = config("POSTGRES_DEV_PORT")
+        options = "-c search_path=temp"
+        connstr = "postgresql://{user}@{host}:{port}/{database}".format(user=self.user,
+                                                                        host=self.host,
+                                                                        database=self.database,
+                                                                        port=self.port
+                                                                        )
+        self._engine = create_engine(connstr,
+                                     connect_args={'password': config('DAGSTER_PG_PASSWORD'),
+                                                   'options': options},
+                                     isolation_level="REPEATABLE READ")
 
     def get_engine( self ):
         return self.engine
