@@ -82,4 +82,4 @@ code behaves as desired and does not break over time.
 
 ## General architecture
 
-![image](src/images/Activity diagram.png).
+![image](src/images/architecture_diagram.png).
