@@ -1,5 +1,5 @@
 from dagster import repository
-from finapp.pipelines.bond_prices import bond_prices_pipeline
+from finapp.pipelines.bond_prices import get_bond_prices_api
 from finapp.schedules.my_hourly_schedule import my_hourly_schedule
 from finapp.sensors.my_sensor import my_sensor
 
@@ -12,7 +12,7 @@ def finapp():
     For hints on building your Dagster repository, see our documentation overview on Repositories:
     https://docs.dagster.io/overview/repositories-workspaces/repositories
     """
-    pipelines = [bond_prices_pipeline]
+    pipelines = [get_bond_prices_api]
     schedules = [my_hourly_schedule]
     sensors = [my_sensor]
 

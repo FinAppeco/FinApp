@@ -49,7 +49,7 @@ services:
       - -w
       - workspace.yaml
     container_name: dagster_dagit_finapp
-    image: dagster_app:0.12.14
+    image: dagster_app:0.14.15
 #    restart: on-failure
     expose:
       - "3000"
@@ -81,7 +81,7 @@ services:
       - dagster-daemon
       - run
     container_name: dagster_daemon_finapp
-    image: dagster_app:0.12.14
+    image: dagster_app:0.14.15
 #    restart: on-failure
     environment:
       DAGSTER_PG_PASSWORD: ${DAGSTER_PG_PASSWORD}

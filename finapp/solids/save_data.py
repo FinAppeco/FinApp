@@ -1,8 +1,8 @@
-from dagster import solid
+from dagster import op
 from dagster_pandas import DataFrame
 import os
 import pandas as pd
-@solid(name="local_save")
+@op(name="local_save")
 def local_save(context, df: DataFrame) -> None:
     """Save the output as excel in local.
 
