@@ -9,7 +9,7 @@ class PostgresConnector(object):
         self.user = config("DAGSTER_PG_USERNAME")
         self.host = config("DAGSTER_PG_OP_DB")
         self.database = config("DAGSTER_PG_OP_DB")
-        self.port = config("POSTGRES_DEV_PORT")
+        self.port = config("DAGSTER_PG_OP_DB_PORT")
         options = "-c search_path=temp"
         connstr = "postgresql://{user}@{host}:{port}/{database}".format(user=self.user,
                                                                         host=self.host,

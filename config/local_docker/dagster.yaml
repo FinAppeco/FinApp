@@ -11,7 +11,7 @@ run_launcher:
       - DAGSTER_PG_PASSWORD
       - DAGSTER_PG_HOST
       - DAGSTER_PG_DB
-      - PGPORT_BACKEND
+      - DAGSTER_PG_OP_DB_PORT
     network: dagster_network
     container_kwargs:
       auto_remove: true

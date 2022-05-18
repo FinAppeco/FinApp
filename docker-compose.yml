@@ -22,7 +22,7 @@ services:
       DAGSTER_PG_DB: ${DAGSTER_PG_DB}
       DAGSTER_PG_HOST: ${DAGSTER_PG_HOST}
       DAGSTER_PG_OP_DB: ${DAGSTER_PG_OP_DB}
-      PGPORT_BACKEND : ${POSTGRES_DEV_PORT}
+      DAGSTER_PG_OP_DB_PORT : ${DAGSTER_PG_OP_DB_PORT}
       DAGSTER_CURRENT_IMAGE: ${DAGSTER_CURRENT_IMAGE}
       FINNUB_KEY: ${FINNUB_KEY}
     volumes:
@@ -61,7 +61,7 @@ services:
       DAGSTER_PG_DB: ${DAGSTER_PG_DB}
       DAGSTER_PG_HOST: ${DAGSTER_PG_HOST}
       DAGSTER_PG_OP_DB: ${DAGSTER_PG_OP_DB}
-      PGPORT_BACKEND : ${POSTGRES_DEV_PORT}
+      DAGSTER_PG_OP_DB_PORT : ${DAGSTER_PG_OP_DB_PORT}
       DAGSTER_CURRENT_IMAGE: ${DAGSTER_CURRENT_IMAGE}
       FINNUB_KEY: ${FINNUB_KEY}
     volumes: # Make docker client accessible so we can terminate containers from dagit
@@ -89,7 +89,7 @@ services:
       DAGSTER_PG_DB: ${DAGSTER_PG_DB}
       DAGSTER_PG_HOST: ${DAGSTER_PG_HOST}
       DAGSTER_PG_OP_DB: ${DAGSTER_PG_OP_DB}
-      PGPORT_BACKEND : ${POSTGRES_DEV_PORT}
+      DAGSTER_PG_OP_DB_PORT : ${DAGSTER_PG_OP_DB_PORT}
       DAGSTER_CURRENT_IMAGE: ${DAGSTER_CURRENT_IMAGE}
       FINNUB_KEY: ${FINNUB_KEY}
     volumes: # Make docker client accessible so we can launch containers using host docker
@@ -112,7 +112,7 @@ services:
       POSTGRES_DB: ${DAGSTER_PG_DB}
       PGPORT: 5432
     ports:
-      - ${PGPORT_BACKEND}:5432
+      - 5432:5432
     networks:
       - dagster_network
 
@@ -126,7 +126,7 @@ services:
       POSTGRES_DB: ${DAGSTER_PG_OP_DB}
       PGPORT: 5433
     ports:
-      - ${POSTGRES_DEV_PORT}:5433
+      - 5433:5433
     networks:
       - dagster_network
 
