@@ -1,7 +1,7 @@
 from dagster import RunRequest, sensor
 
 
-@sensor(pipeline_name="bond_prices_pipeline", mode="prod")
+@sensor(pipeline_name="get_bond_prices_api", mode="prod")
 def my_sensor(_context):
     """
     A sensor definition. This example sensor always requests a pipeline run at each sensor tick.

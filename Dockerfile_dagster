@@ -10,13 +10,13 @@ RUN mkdir -p $DAGSTER_HOME
 
 RUN pip install -U pip setuptools
 RUN pip install --no-cache-dir --default-timeout=100\
-    dagster==0.12.14  \
-    dagster-graphql==0.12.14   \
-    dagit==0.12.14   \
-    dagster-postgres==0.12.14   \
-    dagster-docker==0.12.14   \
-    dagster-gcp==0.12.14  \
-    dagstermill==0.12.14 \
+    dagster==0.14.15  \
+    dagster-graphql==0.14.15   \
+    dagit==0.14.15   \
+    dagster-postgres==0.14.15   \
+    dagster-docker==0.14.15   \
+    dagster-gcp==0.14.15  \
+    dagstermill==0.14.15 \
     markupsafe==2.0.1 \
     jupyter
 

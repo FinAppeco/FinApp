@@ -1,14 +1,16 @@
-from dagster import solid, Field
+from dagster import Field, op
 from decouple import AutoConfig
 import datetime
 import pandas as pd
+
 config = AutoConfig(search_path='FinApp')
 
-@solid(name='get_bond_price',
-       config_schema={'isin': Field(str),
-                      "from": Field(str), "to": Field(str)},
-       required_resource_keys={'finnhub_client'}
-       )
+
+@op(name='get_bond_price',
+    config_schema={'isin': Field(str),
+                   "from": Field(str), "to": Field(str)},
+    required_resource_keys={'finnhub_client'}
+    )
 def get_bond_price(context):
     """
         Api to download bond prices

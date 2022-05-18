@@ -4,7 +4,7 @@ from dagster import hourly_schedule
 
 
 @hourly_schedule(
-    pipeline_name="bond_prices_pipeline",
+    pipeline_name="get_bond_prices_api",
     start_date=datetime(2021, 1, 1),
     execution_timezone="US/Central",
 )
