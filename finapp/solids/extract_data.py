@@ -1,15 +1,15 @@
-from dagster import Field, op
-from decouple import AutoConfig
+from dagster import Field, op, Out
 import datetime
 import pandas as pd
 
-config = AutoConfig(search_path='FinApp')
+from finapp.schemas.bonds import BondPricesDgType
 
 
 @op(name='get_bond_price',
     config_schema={'isin': Field(str),
                    "from": Field(str), "to": Field(str)},
-    required_resource_keys={'finnhub_client'}
+    required_resource_keys={'finnhub_client'},
+    out=Out(io_manager_key="gcs_parquet_io_manager", dagster_type=BondPricesDgType)
     )
 def get_bond_price(context):
     """
@@ -33,9 +33,10 @@ def get_bond_price(context):
     to_datetime = int(datetime.datetime.timestamp(datetime.datetime.strptime(to_datetime, "%Y-%m-%d")))
     results = finnhub_client.bond_price(isin, from_datetime, to_datetime)
     df = pd.DataFrame(results)
+    del results
     df['isin'] = isin
     df.reset_index(inplace=True)
-    df.rename(columns={'c': 'close', 's': 'status', 't': 'date'},
+    df.rename(columns={'index': 'id', 'c': 'close', 's': 'status', 't': 'date'},
               inplace=True)
 
     df['date'] = pd.to_datetime(df['date'], unit='s')

@@ -15,7 +15,7 @@ RUN pip install --no-cache-dir --default-timeout=100\
     dagit==0.14.15   \
     dagster-postgres==0.14.15   \
     dagster-docker==0.14.15   \
-    dagster-gcp==0.14.15  \
+    dagster-gcp==0.14.15 \
     dagstermill==0.14.15 \
     markupsafe==2.0.1 \
     jupyter

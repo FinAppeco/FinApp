@@ -7,9 +7,9 @@ from dagster import fs_io_manager, mem_io_manager
 import dagstermill as dm
 from finapp.resources.io_managers import gcs_parquet_io_manager
 
-IO_MANAGER = {"parquet_manager": gcs_parquet_io_manager, 'fs_manager': fs_io_manager,
-              'mem_manager': mem_io_manager, 'gcs_pickle_io_manager': gcs_pickle_io_manager,
-              'gcs': gcs_resource, 'gcs_filemanager': gcs_file_manager,
+IO_MANAGER = {"gcs_parquet_io_manager": gcs_parquet_io_manager, 'fs_io_manager': fs_io_manager,
+              'mem_io_manager': mem_io_manager, 'gcs_pickle_io_manager': gcs_pickle_io_manager,
+              'gcs': gcs_resource, 'gcs_file_manager': gcs_file_manager,
               "output_notebook_io_manager": dm.local_output_notebook_io_manager}
 
 

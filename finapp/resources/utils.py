@@ -1,7 +1,12 @@
 import os
 from collections import Counter
+from venv import logger
+
 import pandas as pd
 from dagster.utils import mkdir_p
+
+from finapp.resources.asset_manager import df_asset_manager
+
 
 def upload_parquet_gcs(context, obj, key, bucket_obj):
     """
@@ -12,7 +17,6 @@ def upload_parquet_gcs(context, obj, key, bucket_obj):
     if isinstance(obj, pd.DataFrame):
         context.log.info(f"rows: {len(obj)}")
         try:
-
             temp_parquet = os.path.join(os.getcwd(), 'temp_parquet_manager', '/'.join(key.split('/')[:-1]))
             mkdir_p(temp_parquet)
             temp_parquet = os.path.join(temp_parquet, key.split('/')[-1])

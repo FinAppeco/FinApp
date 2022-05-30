@@ -16,8 +16,8 @@ def get_bond_prices():
     """
     A graph definition to predict bond price
     """
-    df = get_bond_price()
-    local_save(df)
+    get_bond_price()
+
 
 
 config_bonds = test_config.get_preset(name_yaml='bond_price.yaml')
