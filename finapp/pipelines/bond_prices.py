@@ -16,8 +16,11 @@ def get_bond_prices():
     """
     A graph definition to predict bond price
     """
-    get_bond_price()
-
+    df = get_bond_price()
+    # TODO: shikuR has to implement data cleaning and transformation
+    df = cleaning_and_transformation_bonds(df)
+    # TODO: Shikur and Wilmar has to define a function where the model is going to trained and registered
+    df = bond_model_training(df)
 
 
 config_bonds = test_config.get_preset(name_yaml='bond_price.yaml')
