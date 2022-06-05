@@ -4,6 +4,7 @@ FROM python:3.8-slim
 # exposing your repository to dagit and dagster-daemon, and to load
 # the DagsterInstance
 RUN pip install -U pip setuptools
+
 RUN pip install --no-cache-dir --default-timeout=100\
     dagster==0.14.15  \
     dagster-graphql==0.14.15   \
@@ -27,18 +28,18 @@ RUN pip install --no-cache-dir --default-timeout=100\
 
 
 WORKDIR /var
-COPY terraform-gcp/keyfile.json ./
+COPY ../../terraform-gcp/keyfile.json ./
 ENV GOOGLE_APPLICATION_CREDENTIALS=/var/keyfile.json
 
 WORKDIR /opt/dagster/app/
 # Add repository code
 RUN mkdir finapp
 
-COPY finapp/ finapp/
+COPY ../../finapp finapp/
 
-COPY config/local_docker/dagster.yaml config/local_docker/workspace.yaml setup.py .env ./
+COPY config/cloud_docker/dagster.yaml config/cloud_docker/workspace.yaml ./
 
-RUN pip install -e .
+#RUN pip install -e .
 
 ENV DAGSTER_HOME=/opt/dagster/app/
 
