@@ -35,7 +35,7 @@ WORKDIR /opt/dagster/app/
 # Add repository code
 RUN mkdir finapp
 
-COPY ../../finapp finapp/
+COPY ./finapp finapp/
 
 COPY config/cloud_docker/dagster.yaml config/cloud_docker/workspace.yaml ./
 
