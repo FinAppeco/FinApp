@@ -28,7 +28,7 @@ RUN pip install --no-cache-dir --default-timeout=100\
 
 
 WORKDIR /var
-COPY ../../terraform-gcp/keyfile.json ./
+COPY ./terraform-gcp/keyfile.json ./
 ENV GOOGLE_APPLICATION_CREDENTIALS=/var/keyfile.json
 
 WORKDIR /opt/dagster/app/
