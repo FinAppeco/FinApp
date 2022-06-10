@@ -74,4 +74,3 @@ services:
 networks:
   default:
     driver: bridge
-    name: dagster_cloud_network
