@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.3"
 services:
   # This service runs the gRPC server that loads and executes your pipelines, in both dagit
   # and dagster-daemon. By setting DAGSTER_CURRENT_IMAGE to its own image, we tell the
