@@ -6,17 +6,9 @@ services:
   # Multiple containers like this can be deployed separately - each just needs to run on
   # its own port, and have its own entry in the workspace.yaml file that's loaded by dagit.
   finapp_pipelines:
-    build:
-      context: .
-      dockerfile: config/cloud_docker/Dockerfile_pipelines
-      args:
-        DAGSTER_PG_USERNAME: ${DAGSTER_PG_USERNAME}
-        DAGSTER_PG_PASSWORD: ${DAGSTER_PG_PASSWORD}
-        DAGSTER_PG_HOST: ${DAGSTER_PG_HOST}
-        DAGSTER_PG_DB: ${DAGSTER_PG_DB}
     env_file: config/cloud_docker/.env-non-dev
     container_name: finapp_pipelines_cloud
-    image: finapp_pipelines_non_dev
+    image: christianpiconc/finapp_pipelines_non_dev
     #    restart: on-failure:2
     expose:
       - 4000
@@ -28,14 +20,6 @@ services:
   # a queue and later dequeued and launched by dagster-daemon.
   finapp_dagit:
     env_file: ./config/cloud_docker/.env-non-dev
-    build:
-      context: .
-      dockerfile: config/cloud_docker/Dockerfile_dagster
-      args:
-        DAGSTER_PG_USERNAME: ${DAGSTER_PG_USERNAME}
-        DAGSTER_PG_PASSWORD: ${DAGSTER_PG_PASSWORD}
-        DAGSTER_PG_HOST: ${DAGSTER_PG_HOST}
-        DAGSTER_PG_DB: ${DAGSTER_PG_DB}
     entrypoint:
       - dagit
       - -h
@@ -45,7 +29,7 @@ services:
       - -w
       - workspace.yaml
     container_name: dagster_dagit_finapp_cloud
-    image: dagster_app_non_dev:0.14.15
+    image: christianpiconc/dagster_app_non_dev
     #    restart: on-failure
     expose:
       - "3000"
@@ -63,7 +47,7 @@ services:
       - dagster-daemon
       - run
     container_name: dagster_daemon_finapp_cloud
-    image: dagster_app_non_dev:0.14.15
+    image: christianpiconc/dagster_app_non_dev
     #    restart: on-failure
     env_file: ./config/cloud_docker/.env-non-dev
     volumes: # Make docker client accessible so we can launch containers using host docker
