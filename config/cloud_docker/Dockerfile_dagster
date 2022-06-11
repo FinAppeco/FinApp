@@ -1,12 +1,12 @@
 FROM python:3.8-slim
 
-ENV DAGSTER_HOME=/opt/dagster/dagster_home/
 ARG DAGSTER_PG_USERNAME=$DAGSTER_PG_USERNAME
 ARG DAGSTER_PG_PASSWORD=$DAGSTER_PG_PASSWORD
 ARG DAGSTER_PG_HOST=$DAGSTER_PG_HOST
 ARG DAGSTER_PG_DB=$DAGSTER_PG_DB
 
-RUN mkdir -p $DAGSTER_HOME
+ENV GOOGLE_APPLICATION_CREDENTIALS=/var/keyfile.json
+ENV DAGSTER_HOME=/opt/dagster/dagster_home/
 
 RUN pip install -U pip setuptools
 RUN pip install --no-cache-dir --default-timeout=100\
@@ -22,14 +22,11 @@ RUN pip install --no-cache-dir --default-timeout=100\
 
 
 # Set $DAGSTER_HOME and copy dagster instance and workspace YAML there
-
-COPY config/cloud_docker/dagster.yaml config/cloud_docker/workspace.yaml config/cloud_docker/database_startup.sh $DAGSTER_HOME
-
 WORKDIR $DAGSTER_HOME
 
-RUN chmod +x database_startup.sh
+COPY config/cloud_docker/database_startup.sh $DAGSTER_HOME
 
-RUN /opt/dagster/dagster_home/database_startup.sh
+RUN chmod +x database_startup.sh && $DAGSTER_HOME/database_startup.sh
 
 EXPOSE 3000
 

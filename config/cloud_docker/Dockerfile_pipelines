@@ -5,6 +5,9 @@ ARG DAGSTER_PG_PASSWORD=$DAGSTER_PG_PASSWORD
 ARG DAGSTER_PG_HOST=$DAGSTER_PG_HOST
 ARG DAGSTER_PG_DB=$DAGSTER_PG_DB
 ARG FINNUB_KEY=$FINNUB_KEY
+
+ENV DAGSTER_HOME=/opt/dagster/app/
+ENV GOOGLE_APPLICATION_CREDENTIALS=/var/keyfile.json
 # Checkout and install dagster libraries needed to run the gRPC server
 # exposing your repository to dagit and dagster-daemon, and to load
 # the DagsterInstance
@@ -31,25 +34,13 @@ RUN pip install --no-cache-dir --default-timeout=100\
     pandas==1.3.3 \
     jupyter
 
-
-WORKDIR /var
-COPY ./terraform-gcp/keyfile.json ./
-ENV GOOGLE_APPLICATION_CREDENTIALS=/var/keyfile.json
-
-WORKDIR /opt/dagster/app/
+WORKDIR $DAGSTER_HOME
 # Add repository code
 RUN mkdir finapp
 
 COPY ./finapp finapp/
 
-COPY config/cloud_docker/dagster.yaml config/cloud_docker/workspace.yaml ./
-
-#RUN pip install -e .
-
-ENV DAGSTER_HOME=/opt/dagster/app/
-
 # Run dagster gRPC server on port 4000
-
 EXPOSE 4000
 
 # Using CMD rather than ENTRYPOINT allows the command to be overridden in

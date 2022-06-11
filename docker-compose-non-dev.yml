@@ -12,6 +12,7 @@ services:
       DAGSTER_PG_PASSWORD: ${DAGSTER_PG_PASSWORD}
       DAGSTER_PG_HOST: ${DAGSTER_PG_HOST}
       DAGSTER_PG_DB: ${DAGSTER_PG_DB}
+      DAGSTER_PG_OP_DB_PORT: ${DAGSTER_PG_OP_DB_PORT}
       FINNUB_KEY: ${FINNUB_KEY}
     container_name: finapp_pipelines
     image: christianpiconc/finapp_pipelines_non_dev
@@ -20,6 +21,9 @@ services:
       - 4000
     ports:
       - "4000:4000"
+    volumes:
+      - ./config/cloud_docker:/opt/dagster/app
+      - ./terraform-gcp:/var
   #    network_mode: host
   # This service runs dagit, which loads the pipelines from the user code container.
   # Since our instance uses the QueuedRunCoordinator, any runs submitted from dagit will be put on
@@ -49,6 +53,8 @@ services:
       - "3000:3000"
     volumes: # Make docker client accessible so we can terminate containers from dagit
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./config/cloud_docker:/opt/dagster/app
+      - ./terraform-gcp:/var
     depends_on:
       - finapp_pipelines
 
