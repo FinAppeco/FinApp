@@ -1,0 +1,76 @@
+version: "3.3"
+services:
+  # This service runs the gRPC server that loads and executes your pipelines, in both dagit
+  # and dagster-daemon. By setting DAGSTER_CURRENT_IMAGE to its own image, we tell the
+  # run launcher to use this same image when launching runs in a new container as well.
+  # Multiple containers like this can be deployed separately - each just needs to run on
+  # its own port, and have its own entry in the workspace.yaml file that's loaded by dagit.
+  finapp_pipelines:
+    build:
+      context: .
+      dockerfile: config/cloud_docker/Dockerfile_pipelines
+      args:
+        DAGSTER_PG_USERNAME: ${DAGSTER_PG_USERNAME}
+        DAGSTER_PG_PASSWORD: ${DAGSTER_PG_PASSWORD}
+        DAGSTER_PG_HOST: ${DAGSTER_PG_HOST}
+        DAGSTER_PG_DB: ${DAGSTER_PG_DB}
+    env_file: ./config/cloud_docker/.env-non-dev
+    container_name: finapp_pipelines_cloud
+    image: christianpiconc/finapp_pipelines_non_dev
+    #    restart: on-failure:2
+    expose:
+      - 4000
+    ports:
+      - "4000:4000"
+  #    network_mode: host
+  # This service runs dagit, which loads the pipelines from the user code container.
+  # Since our instance uses the QueuedRunCoordinator, any runs submitted from dagit will be put on
+  # a queue and later dequeued and launched by dagster-daemon.
+  finapp_dagit:
+    env_file: ./config/cloud_docker/.env-non-dev
+    build:
+      context: .
+      dockerfile: config/cloud_docker/Dockerfile_dagster
+      args:
+        DAGSTER_PG_USERNAME: ${DAGSTER_PG_USERNAME}
+        DAGSTER_PG_PASSWORD: ${DAGSTER_PG_PASSWORD}
+        DAGSTER_PG_HOST: ${DAGSTER_PG_HOST}
+        DAGSTER_PG_DB: ${DAGSTER_PG_DB}
+    entrypoint:
+      - dagit
+      - -h
+      - "0.0.0.0"
+      - -p
+      - "3000"
+      - -w
+      - workspace.yaml
+    container_name: dagster_dagit_finapp_cloud
+    image: christianpiconc/dagster_app_non_dev
+    #    restart: on-failure
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"
+    volumes: # Make docker client accessible so we can terminate containers from dagit
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - finapp_pipelines
+
+  # This service runs the dagster-daemon process, which is responsible for taking runs
+  # off of the queue and launching them, as well as creating runs from schedules or sensors.
+  finapp_daemon:
+    entrypoint:
+      - dagster-daemon
+      - run
+    container_name: dagster_daemon_finapp_cloud
+    image: christianpiconc/dagster_app_non_dev
+    #    restart: on-failure
+    env_file: ./config/cloud_docker/.env-non-dev
+    volumes: # Make docker client accessible so we can launch containers using host docker
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - finapp_pipelines
+
+networks:
+  default:
+    driver: bridge

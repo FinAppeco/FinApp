@@ -12,9 +12,12 @@ def finnhub_client(context):
     """
     Returns: A finnhub client.
     """
-    api_key = config('FINNUB_KEY', None)
     try:
-        client = finnhub.Client(api_key)
+        api_key = os.getenv('FINNUB_KEY')
     except Exception as e:
-        raise e
+        api_key = config('FINNUB_KEY', api_key)
+    if api_key is not None:
+        client = finnhub.Client(api_key)
+    else:
+        raise Exception('FINNUB_KEY the env varible is empty or it does not exist')
     return client
