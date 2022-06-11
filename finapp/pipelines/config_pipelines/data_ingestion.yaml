@@ -1,0 +1,11 @@
+execution:
+  config:
+    in_process:
+ops:
+  get_cabond_prices:
+    ops:
+      get_cabond_price:
+        config:
+          country: 'canada'
+          sourceloc: 'finapp/local_data/lookup3.csv'
+          transformloc: 'finapp/local_data/transformeddata'
