@@ -7,7 +7,7 @@ services:
   # its own port, and have its own entry in the workspace.yaml file that's loaded by dagit.
   finapp_pipelines:
 #    env_file: ./config/cloud_docker/.env-non-dev
-    container_name: finapp_pipelines_cloud
+    container_name: finapp_pipelines
     user: root
     image: christianpiconc/finapp_pipelines_non_dev
     #    restart: on-failure:2

@@ -16,7 +16,7 @@ services:
         DAGSTER_PG_DB: ${DAGSTER_PG_DB}
         FINNUB_KEY: ${FINNUB_KEY}
     env_file: ./config/cloud_docker/.env-non-dev
-    container_name: finapp_pipelines_cloud
+    container_name: finapp_pipelines
     image: christianpiconc/finapp_pipelines_non_dev
     #    restart: on-failure:2
     expose:
