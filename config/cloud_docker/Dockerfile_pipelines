@@ -37,7 +37,6 @@ RUN pip install --no-cache-dir --default-timeout=100\
 WORKDIR $DAGSTER_HOME
 # Add repository code
 RUN mkdir finapp
-
 COPY ./finapp finapp/
 
 # Run dagster gRPC server on port 4000
