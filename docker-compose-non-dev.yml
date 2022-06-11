@@ -6,9 +6,14 @@ services:
   # Multiple containers like this can be deployed separately - each just needs to run on
   # its own port, and have its own entry in the workspace.yaml file that's loaded by dagit.
   finapp_pipelines:
-#    env_file: ./config/cloud_docker/.env-non-dev
+    env_file: ./config/cloud_docker/.env-non-dev
+    environment:
+      DAGSTER_PG_USERNAME: ${DAGSTER_PG_USERNAME}
+      DAGSTER_PG_PASSWORD: ${DAGSTER_PG_PASSWORD}
+      DAGSTER_PG_HOST: ${DAGSTER_PG_HOST}
+      DAGSTER_PG_DB: ${DAGSTER_PG_DB}
+      FINNUB_KEY: ${FINNUB_KEY}
     container_name: finapp_pipelines
-    user: root
     image: christianpiconc/finapp_pipelines_non_dev
     #    restart: on-failure:2
     expose:
@@ -21,6 +26,12 @@ services:
   # a queue and later dequeued and launched by dagster-daemon.
   finapp_dagit:
     env_file: ./config/cloud_docker/.env-non-dev
+    environment:
+      DAGSTER_PG_USERNAME: ${DAGSTER_PG_USERNAME}
+      DAGSTER_PG_PASSWORD: ${DAGSTER_PG_PASSWORD}
+      DAGSTER_PG_HOST: ${DAGSTER_PG_HOST}
+      DAGSTER_PG_DB: ${DAGSTER_PG_DB}
+      FINNUB_KEY: ${FINNUB_KEY}
     entrypoint:
       - dagit
       - -h
@@ -44,6 +55,12 @@ services:
   # This service runs the dagster-daemon process, which is responsible for taking runs
   # off of the queue and launching them, as well as creating runs from schedules or sensors.
   finapp_daemon:
+    environment:
+      DAGSTER_PG_USERNAME: ${DAGSTER_PG_USERNAME}
+      DAGSTER_PG_PASSWORD: ${DAGSTER_PG_PASSWORD}
+      DAGSTER_PG_HOST: ${DAGSTER_PG_HOST}
+      DAGSTER_PG_DB: ${DAGSTER_PG_DB}
+      FINNUB_KEY: ${FINNUB_KEY}
     entrypoint:
       - dagster-daemon
       - run
