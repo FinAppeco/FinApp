@@ -1,5 +1,10 @@
 FROM python:3.8-slim
 
+ARG DAGSTER_PG_USERNAME=$DAGSTER_PG_USERNAME
+ARG DAGSTER_PG_PASSWORD=$DAGSTER_PG_PASSWORD
+ARG DAGSTER_PG_HOST=$DAGSTER_PG_HOST
+ARG DAGSTER_PG_DB=$DAGSTER_PG_DB
+ARG FINNUB_KEY=$FINNUB_KEY
 # Checkout and install dagster libraries needed to run the gRPC server
 # exposing your repository to dagit and dagster-daemon, and to load
 # the DagsterInstance

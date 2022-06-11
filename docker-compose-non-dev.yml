@@ -6,8 +6,9 @@ services:
   # Multiple containers like this can be deployed separately - each just needs to run on
   # its own port, and have its own entry in the workspace.yaml file that's loaded by dagit.
   finapp_pipelines:
-    env_file: ./config/cloud_docker/.env-non-dev
+#    env_file: ./config/cloud_docker/.env-non-dev
     container_name: finapp_pipelines_cloud
+    user: root
     image: christianpiconc/finapp_pipelines_non_dev
     #    restart: on-failure:2
     expose:

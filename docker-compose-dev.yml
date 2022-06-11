@@ -14,6 +14,7 @@ services:
         DAGSTER_PG_PASSWORD: ${DAGSTER_PG_PASSWORD}
         DAGSTER_PG_HOST: ${DAGSTER_PG_HOST}
         DAGSTER_PG_DB: ${DAGSTER_PG_DB}
+        FINNUB_KEY: ${FINNUB_KEY}
     env_file: ./config/cloud_docker/.env-non-dev
     container_name: finapp_pipelines_cloud
     image: christianpiconc/finapp_pipelines_non_dev
