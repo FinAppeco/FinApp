@@ -22,7 +22,7 @@ services:
     ports:
       - "4000:4000"
     volumes:
-      - ./config/cloud_docker:/opt/dagster/app
+      - ./config/cloud_docker:/opt/dagster/app/
       - ./terraform-gcp:/var
   #    network_mode: host
   # This service runs dagit, which loads the pipelines from the user code container.
@@ -53,7 +53,7 @@ services:
       - "3000:3000"
     volumes: # Make docker client accessible so we can terminate containers from dagit
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./config/cloud_docker:/opt/dagster/home
+      - ./config/cloud_docker/:/opt/dagster/dagster_home/
       - ./terraform-gcp:/var
     depends_on:
       - finapp_pipelines
@@ -76,7 +76,7 @@ services:
     env_file: ./config/cloud_docker/.env-non-dev
     volumes: # Make docker client accessible so we can launch containers using host docker
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./config/cloud_docker:/opt/dagster/home
+      - ./config/cloud_docker/:/opt/dagster/dagster_home/
       - ./terraform-gcp:/var
     depends_on:
       - finapp_pipelines
