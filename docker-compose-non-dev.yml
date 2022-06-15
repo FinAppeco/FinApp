@@ -22,8 +22,9 @@ services:
     ports:
       - "4000:4000"
     volumes:
-      - ./config/cloud_docker:/opt/dagster/app/
-      - ./terraform-gcp:/var
+      - ./config/cloud_docker/dagster.yaml:/opt/dagster/app/dagster.yaml
+      - ./config/cloud_docker/workspace.yaml:/opt/daster/app/workspace.yaml
+      - ./terraform-gcp/keyfile.json:/var/keyfile.json
   #    network_mode: host
   # This service runs dagit, which loads the pipelines from the user code container.
   # Since our instance uses the QueuedRunCoordinator, any runs submitted from dagit will be put on
@@ -53,8 +54,9 @@ services:
       - "3000:3000"
     volumes: # Make docker client accessible so we can terminate containers from dagit
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./config/cloud_docker/:/opt/dagster/dagster_home/
-      - ./terraform-gcp:/var
+      - ./config/cloud_docker/dagster.yaml:/opt/dagster/dagster_home/dagster.yaml
+      - ./config/cloud_docker/workspace.yaml:/opt/dagster/dagster_home/workspace.yaml
+        - ./terraform-gcp/keyfile.json:/var/keyfile.json
     depends_on:
       - finapp_pipelines
 
@@ -76,8 +78,9 @@ services:
     env_file: ./config/cloud_docker/.env-non-dev
     volumes: # Make docker client accessible so we can launch containers using host docker
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./config/cloud_docker/:/opt/dagster/dagster_home/
-      - ./terraform-gcp:/var
+      - ./config/cloud_docker/dagster.yaml:/opt/dagster/dagster_home/dagster.yaml
+      - ./config/cloud_docker/workspace.yaml:/opt/dagster/dagster_home/workspace.yaml
+        - ./terraform-gcp/keyfile.json:/var/keyfile.json
     depends_on:
       - finapp_pipelines
 
