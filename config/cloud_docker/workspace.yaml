@@ -4,4 +4,4 @@ load_from:
   - grpc_server:
       host: finapp_pipelines
       port: 4000
-      location_name: "christianpiconc/finapp_pipelines_non_dev"
+      location_name: "finapp_pipelines"
