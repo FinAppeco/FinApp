@@ -11,9 +11,3 @@ variable "zone" {
 }
 
 variable "sql_user_pwd" {}
-
-variable "sql_user_pwd" {}
-
-variable "sql_user_pwd" {}
-
-variable "sql_user_pwd" {}
