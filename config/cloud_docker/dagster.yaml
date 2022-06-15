@@ -13,6 +13,7 @@ run_launcher:
       - DAGSTER_PG_DB
       - DAGSTER_PG_OP_DB_PORT
       - FINNUB_KEY
+      - GOOGLE_APPLICATION_CREDENTIALS
     network: finapp_default
     container_kwargs:
       auto_remove: true
