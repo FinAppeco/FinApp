@@ -24,7 +24,7 @@ services:
     volumes:
       - ./config/cloud_docker/dagster.yaml:/opt/dagster/app/dagster.yaml
       - ./config/cloud_docker/workspace.yaml:/opt/daster/app/workspace.yaml
-      - ./terraform-gcp/keyfile.json:/var/keyfile.json
+      - ./terraform-gcp/keyfile.json:/opt/daster/app/keyfile.json
   #    network_mode: host
   # This service runs dagit, which loads the pipelines from the user code container.
   # Since our instance uses the QueuedRunCoordinator, any runs submitted from dagit will be put on
