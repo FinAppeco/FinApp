@@ -1,6 +1,6 @@
 variable "project" { }
 
-variable "credentials_file" { }
+variable "credentials_file" {}
 
 variable "region" {
   default = "us-central1"
@@ -9,3 +9,11 @@ variable "region" {
 variable "zone" {
   default = "us-central1-c"
 }
+
+variable "sql_user_pwd" {}
+
+variable "sql_user_pwd" {}
+
+variable "sql_user_pwd" {}
+
+variable "sql_user_pwd" {}
