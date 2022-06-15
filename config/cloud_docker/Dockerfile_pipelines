@@ -38,6 +38,7 @@ WORKDIR $DAGSTER_HOME
 # Add repository code
 RUN mkdir finapp
 COPY ./finapp finapp/
+COPY ./terraform-gcp/keyfile.json /var/keyfile.json
 
 # Run dagster gRPC server on port 4000
 EXPOSE 4000
