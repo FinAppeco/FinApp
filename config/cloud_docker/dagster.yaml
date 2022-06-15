@@ -12,12 +12,14 @@ run_launcher:
       - DAGSTER_PG_HOST
       - DAGSTER_PG_DB
       - DAGSTER_PG_OP_DB_PORT
-    network: dagster_network
+      - FINNUB_KEY
+      - GOOGLE_APPLICATION_CREDENTIALS
+    network: finapp_default
     container_kwargs:
       auto_remove: true
       volumes: { 'pipelines_storage':
                    { 'bind': '/opt/dagster/app/local_artifact_storage/storage', 'mode': 'rw' },
-                 }
+      }
 
 run_coordinator:
   module: dagster.core.run_coordinator
@@ -70,12 +72,6 @@ event_log_storage:
         env: DAGSTER_PG_DB
       port: 5432
 
-local_artifact_storage:
-  module: dagster.core.storage.root
-  class: LocalArtifactStorage
-  config:
-    base_dir: local_artifact_storage
-
 compute_logs:
   module: dagster.core.storage.local_compute_log_manager
   class: LocalComputeLogManager
@@ -83,4 +79,4 @@ compute_logs:
     base_dir: logs
 
 telemetry:
-      enabled: false
+  enabled: false

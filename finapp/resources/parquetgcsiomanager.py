@@ -1,8 +1,8 @@
 import os
 from pathlib import Path
 import pandas as pd
-
-from dagster import IOManager, InputContext, check, seven
+import datetime
+from dagster import IOManager, InputContext, check, seven, OutputContext
 from dagster.utils.backoff import backoff
 from google.cloud import storage
 from google.api_core.exceptions import Forbidden, TooManyRequests
@@ -32,12 +32,13 @@ class ParquetGCSIOManager(IOManager):
         check.invariant(self.bucket_obj.exists())
         self.prefix = check.str_param(prefix, "prefix")
 
-    def _get_path(self, context):
+    def _get_path(self, context: OutputContext):
         """Automatically construct filepath."""
         parts = context.get_output_identifier()
         run_id = parts[0]
-        output_parts = parts[1:]
-        key = "/".join([self.prefix, "storage", run_id, "files", *output_parts]) + '.parquet'
+        task = parts[1].split('.')[0]
+        date_execution = datetime.datetime.now().strftime(format='%Y-%m-%d_%H:%M:%S')
+        key = "/".join([self.prefix, run_id, date_execution, task]) + '.parquet'
         return key
 
     def _rm_object(self, key):

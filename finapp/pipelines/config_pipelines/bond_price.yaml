@@ -1,3 +1,14 @@
+execution:
+  config:
+    in_process:
+resources:
+  gcs:
+    config:
+      project: mlops-3
+  gcs_parquet_io_manager:
+    config:
+      gcs_bucket: finapp
+      gcs_prefix: landing/bonds/price_data
 ops:
   get_bond_prices:
     ops:

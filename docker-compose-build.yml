@@ -1,0 +1,35 @@
+version: "3.3"
+services:
+  # This service runs the gRPC server that loads and executes your pipelines, in both dagit
+  # and dagster-daemon. By setting DAGSTER_CURRENT_IMAGE to its own image, we tell the
+  # run launcher to use this same image when launching runs in a new container as well.
+  # Multiple containers like this can be deployed separately - each just needs to run on
+  # its own port, and have its own entry in the workspace.yaml file that's loaded by dagit.
+  finapp_pipelines:
+    build:
+      context: .
+      dockerfile: config/cloud_docker/Dockerfile_pipelines
+      args:
+        DAGSTER_PG_USERNAME: ${DAGSTER_PG_USERNAME}
+        DAGSTER_PG_PASSWORD: ${DAGSTER_PG_PASSWORD}
+        DAGSTER_PG_HOST: ${DAGSTER_PG_HOST}
+        DAGSTER_PG_DB: ${DAGSTER_PG_DB}
+        DAGSTER_PG_OP_DB_PORT: ${DAGSTER_PG_OP_DB_PORT}
+        FINNUB_KEY: ${FINNUB_KEY}
+    image: christianpiconc/finapp_pipelines_non_dev
+
+  # This service runs dagit, which loads the pipelines from the user code container.
+  # Since our instance uses the QueuedRunCoordinator, any runs submitted from dagit will be put on
+  # a queue and later dequeued and launched by dagster-daemon.
+  finapp_dagit:
+    build:
+      context: .
+      dockerfile: config/cloud_docker/Dockerfile_dagster
+      args:
+        DAGSTER_PG_USERNAME: ${DAGSTER_PG_USERNAME}
+        DAGSTER_PG_PASSWORD: ${DAGSTER_PG_PASSWORD}
+        DAGSTER_PG_HOST: ${DAGSTER_PG_HOST}
+        DAGSTER_PG_DB: ${DAGSTER_PG_DB}
+    image: christianpiconc/dagster_app_non_dev
+
+

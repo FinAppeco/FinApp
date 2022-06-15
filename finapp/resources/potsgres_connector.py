@@ -7,7 +7,7 @@ class PostgresConnector(object):
 
     def __init__( self, schema ):
         self.user = config("DAGSTER_PG_USERNAME")
-        self.host = config("DAGSTER_PG_OP_DB")
+        self.host = config("DAGSTER_PG_HOST")
         self.database = config("DAGSTER_PG_OP_DB")
         self.port = config("DAGSTER_PG_OP_DB_PORT")
         options = "-c search_path=temp"
