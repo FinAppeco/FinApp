@@ -1,3 +1,4 @@
+import joblib
 from dagster import op, Noneable, Out, Field, get_dagster_logger
 import pandas as pd
 import numpy as np
@@ -53,7 +54,8 @@ def split_data(context, data):
     }
 
 
-@op(config_schema={'lag': Field(Noneable(int), default_value=1, is_required=False)})
+@op(config_schema={'lag': Field(Noneable(int), default_value=1, is_required=False)},
+    required_resource_keys={"gcs"})
 def scale(context, data):
     train = data['train'].values
     test = data['test'].values
@@ -69,13 +71,13 @@ def scale(context, data):
 
     # save the scaler
 
-    model_filename = 'rf_model.joblib'
+    model_filename = context.op.name + '.joblib'
     joblib.dump(train_scaled, model_filename)
 
-    bucket = storage.Client().bucket(bucket_id)
-    blob = bucket.blob('{}/{}'.format(
-        bucket_path,
-        model_filename))
+    storage_client = context.resources.gcs
+    bucket = storage_client.bucket("finapp")
+    bucket_path = 'models/scaler/' + context.op.name
+    blob = bucket.blob(bucket_path)
     blob.upload_from_filename(model_filename)
     return {'scaler': scaler,
             'train_scaled': train_scaled,
