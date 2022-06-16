@@ -30,6 +30,8 @@ def fit_lstm(context, data):
     model.predict(train_reshaped, batch_size=1)
     # Export the model to a local SavedModel directory
     bucket_path_model = 'gs://finapp/models/' + context.op.name
+    test1 = bucket_path_model + '.h5'
+    model.save(test1)
     export_path = tf.keras.models.save_model(model, bucket_path_model)
     logger.info("Model exported to : " + bucket_path_model)
     return model
