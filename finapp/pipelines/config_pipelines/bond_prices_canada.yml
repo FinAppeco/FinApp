@@ -1,0 +1,21 @@
+execution:
+  config:
+    in_process:
+resources:
+  gcs:
+    config:
+      project: mlops-3
+  gcs_parquet_io_manager:
+    config:
+      gcs_bucket: finapp
+      gcs_prefix: landing/bonds/price_data
+ops:
+  get_bond_price_canada:
+    config:
+      path_file: finapp/landing/bond_yields_all_noheader.csv
+      Columns:
+        - "CDN.AVG.1YTO3Y.AVG"
+        - "BD.CDN.2YR.DQ.YLD"
+
+
+

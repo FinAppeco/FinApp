@@ -1,8 +1,10 @@
-from dagster import Field, op, Out
+from dagster import Field, op, Out, List, get_dagster_logger, Array
 import datetime
 import pandas as pd
+import gcsfs
+from finapp.schemas.bonds import BondPricesDgType, BondPricesCanadaDgType
 
-from finapp.schemas.bonds import BondPricesDgType
+logger = get_dagster_logger()
 
 
 @op(name='get_bond_price',
@@ -42,3 +44,39 @@ def get_bond_price(context):
     df['date'] = pd.to_datetime(df['date'], unit='s')
     df = df.reindex(columns=['id', 'isin', 'close', 'status', 'date'])
     return df
+
+
+@op(name='get_bond_price_canada',
+    config_schema={'path_file': Field(str),
+                   "Columns": Field(Array(str))},
+    out=Out(dagster_type=BondPricesCanadaDgType)
+    )
+def get_bond_price_canada(context):
+    """
+        Api to download bond prices
+        Args:
+            api_key (str) : path to api key
+            ticker (str) : ticker of the stock
+            frequency (str) : aggregation time of the stock price
+            from (str) :  intial datetime of the stock
+            to (str) : final datetime of the stock
+
+        Returns:
+            df (Dataframe) : output data
+        """
+
+    path_file = context.solid_config["path_file"]
+    list_columns = context.solid_config["Columns"]
+    fs = gcsfs.GCSFileSystem()
+    columns_to_extract = ["date"] + list_columns
+
+    logger.info('Extracting data from: ' + path_file)
+    with fs.open(path_file) as f:
+        data = pd.read_csv(f, names=columns_to_extract, index_col=False, header=1)
+    data = data.dropna()
+    data["date"] = pd.to_datetime(data['date'])
+    new_columns = [col.replace(".", "_") for col in data.columns]
+    data.columns = new_columns
+
+    logger.info('Extracted data from: ' + path_file)
+    return data
