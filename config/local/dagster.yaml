@@ -1,86 +1,25 @@
-scheduler:
-  module: dagster.core.scheduler
-  class: DagsterDaemonScheduler
-
 run_launcher:
-  module: dagster_docker
-  class: DockerRunLauncher
-  config:
-    env_vars:
-      - DAGSTER_PG_USERNAME
-      - DAGSTER_PG_PASSWORD
-      - DAGSTER_PG_HOST
-      - DAGSTER_PG_DB
-      - DAGSTER_PG_OP_DB_PORT
-    network: dagster_network
-    container_kwargs:
-      auto_remove: true
-      volumes: { 'pipelines_storage':
-                   { 'bind': '/opt/dagster/app/local_artifact_storage/storage', 'mode': 'rw' },
-                 }
+  module: dagster.core.launcher
+  class: DefaultRunLauncher
 
 run_coordinator:
   module: dagster.core.run_coordinator
-  class: QueuedRunCoordinator
-  config:
-    max_concurrent_runs: 25
-
-run_storage:
-  module: dagster_postgres.run_storage
-  class: PostgresRunStorage
-  config:
-    postgres_db:
-      username:
-        env: DAGSTER_PG_USERNAME
-      password:
-        env: DAGSTER_PG_PASSWORD
-      hostname:
-        env: DAGSTER_PG_HOST
-      db_name:
-        env: DAGSTER_PG_DB
-      port: 5432
-
-schedule_storage:
-  module: dagster_postgres.schedule_storage
-  class: PostgresScheduleStorage
-  config:
-    postgres_db:
-      username:
-        env: DAGSTER_PG_USERNAME
-      password:
-        env: DAGSTER_PG_PASSWORD
-      hostname:
-        env: DAGSTER_PG_HOST
-      db_name:
-        env: DAGSTER_PG_DB
-      port: 5432
-
-event_log_storage:
-  module: dagster_postgres.event_log
-  class: PostgresEventLogStorage
-  config:
-    postgres_db:
-      username:
-        env: DAGSTER_PG_USERNAME
-      password:
-        env: DAGSTER_PG_PASSWORD
-      hostname:
-        env: DAGSTER_PG_HOST
-      db_name:
-        env: DAGSTER_PG_DB
-      port: 5432
-
-local_artifact_storage:
-  module: dagster.core.storage.root
-  class: LocalArtifactStorage
-  config:
-    base_dir: local_artifact_storage
+  class: DefaultRunCoordinator
 
 compute_logs:
   module: dagster.core.storage.local_compute_log_manager
   class: LocalComputeLogManager
   config:
-    base_dir: logs
+    base_dir: /Users/christianpiconcalderon/PycharmProjects/FinApp/config/local
 
-telemetry:
-      enabled: false
+# example local_artifact_storage setup pointing to /var/shared/dagster directory
+local_artifact_storage:
+  module: dagster.core.storage.root
+  class: LocalArtifactStorage
+  config:
+    base_dir: /Users/christianpiconcalderon/PycharmProjects/FinApp/config/local
+
+# Configures how long Dagster waits for repositories
+# to load before timing out.
+code_servers:
+  local_startup_timeout: 120

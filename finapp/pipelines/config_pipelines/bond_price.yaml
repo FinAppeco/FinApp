@@ -9,11 +9,3 @@ resources:
     config:
       gcs_bucket: finapp
       gcs_prefix: landing/bonds/price_data
-ops:
-  get_bond_prices:
-    ops:
-      get_bond_price:
-        config:
-          from: '2020-06-01'
-          isin: US912810TD00
-          to: '2022-04-01'

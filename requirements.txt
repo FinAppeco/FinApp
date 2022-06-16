@@ -47,7 +47,7 @@ docstring-parser==0.11
 entrypoints==0.3
 et-xmlfile==1.1.0
 executing==0.8.3
--e git+https://github.com/FinAppeco/FinApp.git@cb29a5582117305508a210f42fab0b82de42dbaf#egg=finapp
+-e git+https://github.com/FinAppeco/FinApp.git@edee618f34d679f4796929bbcc5b5a42ae92dc1f#egg=finapp
 finnhub-python==2.4.13
 Flask==1.1.4
 Flask-Cors==3.0.10

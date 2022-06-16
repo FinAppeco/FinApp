@@ -2,7 +2,7 @@ from finapp.pipelines.forescast_bond_price_canada import forescast_bond_price_ca
 from finapp.resources.custom_clients import finnhub_client
 from finapp.resources.get_config_jobs import PipelineConfiguration
 
-test_config = PipelineConfiguration(name='forescast_bond_price_canada', resource={'finnhub_client': finnhub_client})
+test_config = PipelineConfiguration(name='forescast_bond_price_canada_api', resource={'finnhub_client': finnhub_client})
 
 if __name__=='__main__':
     # debugging pipeline

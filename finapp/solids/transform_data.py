@@ -7,12 +7,12 @@ from sklearn.preprocessing import MinMaxScaler
 logger = get_dagster_logger()
 
 
-@op(out={"out1": Out(), "out2": Out()})
+@op()
 def split_outputs(context, dataset):
     dataset.set_index("date", inplace=True)
     dataset1 = dataset['CDN_AVG_1YTO3Y_AVG']
     dataset2 = dataset['BD_CDN_2YR_DQ_YLD']
-    return dataset1, dataset2
+    return dataset1
 
 
 @op(config_schema={'interval': Field(Noneable(int), default_value=1, is_required=False)})

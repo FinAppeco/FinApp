@@ -1,4 +1,4 @@
-from dagster import Field, op, Out, List, get_dagster_logger, Array
+from dagster import Field, op, Out, List, get_dagster_logger, Array, Noneable
 import datetime
 import pandas as pd
 import gcsfs
@@ -47,8 +47,9 @@ def get_bond_price(context):
 
 
 @op(name='get_bond_price_canada',
-    config_schema={'path_file': Field(str),
-                   "Columns": Field(Array(str))},
+    config_schema={'path_file': Field(str, default_value='finapp/landing/bond_yields_all_noheader.csv',
+                                      is_required=False),
+                   "Columns": Field(Noneable(Array(str)))},
     out=Out(dagster_type=BondPricesCanadaDgType)
     )
 def get_bond_price_canada(context):
@@ -68,7 +69,7 @@ def get_bond_price_canada(context):
     path_file = context.solid_config["path_file"]
     list_columns = context.solid_config["Columns"]
     fs = gcsfs.GCSFileSystem()
-    columns_to_extract = ["date"] + list_columns
+    columns_to_extract = ["date"] + ["CDN.AVG.1YTO3Y.AVG", "BD.CDN.2YR.DQ.YLD"]
 
     logger.info('Extracting data from: ' + path_file)
     with fs.open(path_file) as f:
