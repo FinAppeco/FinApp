@@ -6,18 +6,18 @@ run_coordinator:
   module: dagster.core.run_coordinator
   class: DefaultRunCoordinator
 
-compute_logs:
-  module: dagster.core.storage.local_compute_log_manager
-  class: LocalComputeLogManager
-  config:
-    base_dir: /Users/christianpiconcalderon/PycharmProjects/FinApp/config/local
-
-# example local_artifact_storage setup pointing to /var/shared/dagster directory
-local_artifact_storage:
-  module: dagster.core.storage.root
-  class: LocalArtifactStorage
-  config:
-    base_dir: /Users/christianpiconcalderon/PycharmProjects/FinApp/config/local
+python_logs:
+  dagster_handler_config:
+    handlers:
+      myHandler:
+        class: logging.FileHandler
+        level: INFO
+        filename: "my_dagster_logs.log"
+        mode: "a"
+        formatter: timeFormatter
+    formatters:
+      timeFormatter:
+        format: "%(asctime)s :: %(message)s"
 
 # Configures how long Dagster waits for repositories
 # to load before timing out.

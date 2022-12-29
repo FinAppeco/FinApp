@@ -1,0 +1,100 @@
+[build-system]
+requires = ["setuptools>=61.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "finapp"
+version = "0.1.0"
+description = 'An ML/data application template to orchestrate dataflows and manage data'
+authors = [{ name = "Christian Picon", email = "christian91mp@gmail.com" }]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: Data Science, dataflow, data management",
+]
+
+[tool.dagster]
+module_name = "finapp"
+
+requires-python = ">=3.8"
+
+[project.readme]
+file = "README.md"
+content-type = "text/markdown; charset=UTF-8"
+
+[project.urls]
+Homepage = "https://github.com/FinAppeco/FinApp"
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "pytest-xdist",
+    "black",
+    "isort",
+    "mutmut",
+]
+build = [
+    "coverage",
+    "black",
+]
+
+[tool.setuptools]
+zip-safe = false
+include-package-data = true
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["finapp"]
+namespaces = true
+
+# === Formatting === #
+[tool.flake8]
+ignore = ""
+max-line-length = "79"
+
+[tool.black]
+line-length = 79
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+# Without this we would have to add an empty __init__.py file for every package.
+namespace_packages = true
+# Without this mypy complains
+# about the same module being imported under different names.
+# Note that this also requires setting `mypy_path`.
+explicit_package_bases = true
+# We usually keep our source code under `src/<namespace>/<library>/...`.
+# This option tells mypy to look under that directory path.
+# If your repo has a different layout you can add the appropriate paths
+# by setting MYPYPATH env variable.
+mypy_path = "finapp"
+
+[[tool.mypy.overrides]]
+module = [
+    'pandas.*',
+    'scipy.*',
+    'sympy.*',
+    'rapidjson',
+]
+ignore_missing_imports = true
+
+# === Testing === #
+[tool.pytest.ini_options]
+log_level = "INFO"
+addopts = "--cov --cov-report=term --cov-report=xml"
+python_classes = '*Tests'
+markers = [
+    "e2e: end to end tests",
+]
+
+[tool.coverage.run]
+source = ['finapp']
+
+[tool.coverage.report]
+fail_under = 100
+skip_covered = true
+show_missing = true
+
