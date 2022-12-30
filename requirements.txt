@@ -1,9 +1,13 @@
 dagit==1.0.5
 dagster==1.0.5
 dagster-graphql==1.0.5
-dagster-pandas==1.0.5
+dagster_pandera
+gcsfs
+pandera
 finnhub-python==2.4.13
 pandas
 tensorflow
+joblib
+scikit-learn
 
 

@@ -1,13 +1,11 @@
 from datetime import datetime
 
-from dagster import hourly_schedule
+from dagster import schedule
+
+from finapp.pipelines.bond_prices import get_bond_prices_api, config_bonds
 
 
-@hourly_schedule(
-    pipeline_name="get_bond_prices_api",
-    start_date=datetime(2021, 1, 1),
-    execution_timezone="US/Central",
-)
+@schedule(job=get_bond_prices_api, cron_schedule="0 0 * * *")
 def my_hourly_schedule(_context):
     """
     A schedule definition. This example schedule runs a pipeline every hour.
@@ -16,5 +14,5 @@ def my_hourly_schedule(_context):
     Schedules:
     https://docs.dagster.io/overview/schedules-sensors/schedules
     """
-    run_config = {}
+    run_config = config_bonds
     return run_config

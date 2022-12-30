@@ -48,7 +48,7 @@ def get_bond_price(context):
 
 @op(name='get_bond_price_canada',
     config_schema={'path_file': Field(str, default_value='finapp/landing/bond_yields_all_noheader.csv',
-                                      is_required=False),
+                                      is_required=True),
                    "Columns": Field(Noneable(Array(str)))},
     out=Out(dagster_type=BondPricesCanadaDgType)
     )

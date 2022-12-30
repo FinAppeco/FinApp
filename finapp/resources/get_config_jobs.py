@@ -2,10 +2,10 @@ import os
 from pathlib import Path
 from dagster_gcp import gcs_file_manager
 from dagster_gcp.gcs import gcs_pickle_io_manager, gcs_resource
-from dagster import PresetDefinition
 from dagster import fs_io_manager, mem_io_manager
 import dagstermill as dm
 from finapp.resources.io_managers import gcs_parquet_io_manager
+from finapp.utils import PresetDefinition
 
 IO_MANAGER = {"gcs_parquet_io_manager": gcs_parquet_io_manager, 'fs_io_manager': fs_io_manager,
               'mem_io_manager': mem_io_manager, 'gcs_pickle_io_manager': gcs_pickle_io_manager,
@@ -34,4 +34,4 @@ class PipelineConfiguration:
     def get_preset(self, name_yaml: str):
         """Get the preset given by the name and the path of YAML file"""
         config_files_path = os.path.join(self.path_config, name_yaml)
-        return PresetDefinition.from_files(name=self.name, config_files=[config_files_path], mode='none').run_config
+        return PresetDefinition.from_files(name=self.name, config_files=[config_files_path]).run_config
